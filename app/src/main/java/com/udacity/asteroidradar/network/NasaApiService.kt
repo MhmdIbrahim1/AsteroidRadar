@@ -17,9 +17,9 @@ import retrofit2.http.Query
 
 
 
-val okHttpClient = OkHttpClient.Builder()
+val okHttpClient: OkHttpClient = OkHttpClient.Builder()
     .addInterceptor { apiKeyInterceptor(it) }
-    .build()!!
+    .build()
 
 private val retrofit = Retrofit.Builder()
     .client(okHttpClient)
