@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.udacity.asteroidradar.data.Asteroid
 import com.udacity.asteroidradar.databinding.ItemAsteroidBinding
+//import retrofit2.Call
 
 
-class AsteroidAdapter(val onClickListener: OnClickListener) :
+class AsteroidAdapter(private val onClickListener: OnClickListener) :
     ListAdapter<Asteroid, AsteroidAdapter.AsteroidPropertyViewHolder>(DiffCallback) {
 
     class AsteroidPropertyViewHolder(private var binding: ItemAsteroidBinding) :
@@ -56,4 +57,6 @@ class AsteroidAdapter(val onClickListener: OnClickListener) :
     class OnClickListener(val clickListener: (asteroid: Asteroid) -> Unit) {
         fun onClick(asteroid: Asteroid) = clickListener(asteroid)
     }
+
+
 }

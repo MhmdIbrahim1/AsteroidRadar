@@ -2,7 +2,7 @@ package com.udacity.asteroidradar
 
 import com.udacity.asteroidradar.work.RefreshDataWorker
 import android.app.Application
-import android.os.Build
+//import android.os.Build
 import androidx.work.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 
 class MyApplication : Application() {
 
-    val applicationScope = CoroutineScope(Dispatchers.Default)
+    private val applicationScope = CoroutineScope(Dispatchers.Default)
 
     private fun delayedInit() {
         applicationScope.launch {
@@ -26,9 +26,7 @@ class MyApplication : Application() {
                 .setRequiresBatteryNotLow(true)
                 .setRequiresCharging(true)
                 .apply {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        setRequiresDeviceIdle(true)
-                    }
+                    setRequiresDeviceIdle(true)
                 }.build()
 
         val repeatingRequest
