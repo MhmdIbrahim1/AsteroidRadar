@@ -45,11 +45,10 @@ The following components from the Jetpack library are used:
 ## Code review from udacity :D 
 ![Screenshot 2022-08-27 at 22-58-10 Look at my Udacity Project Feedback!](https://user-images.githubusercontent.com/107378571/187047769-9316cb1c-4857-4a9b-a1dd-cd70aba0bb7e.png)
 
-##App review :D
+## App review :D
 <img width="214" alt="image" src="https://user-images.githubusercontent.com/107378571/187047818-aea056fa-f1f6-4a81-8f42-6f5b30f4d562.png">
 
 <img width="197" alt="image" src="https://user-images.githubusercontent.com/107378571/187047867-a712efff-beb2-4a69-a345-5b63b5b0f0fd.png">
-
 
 <img width="196" alt="image" src="https://user-images.githubusercontent.com/107378571/187047829-295dc7bd-ec8a-4350-801d-09b1ccd49699.png">
 
