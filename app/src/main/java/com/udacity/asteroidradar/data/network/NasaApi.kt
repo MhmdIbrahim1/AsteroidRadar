@@ -1,8 +1,8 @@
 package com.udacity.asteroidradar.data.network
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.udacity.asteroidradar.BuildConfig
-import com.udacity.asteroidradar.util.Constants
+import com.udacity.asteroidradar.util.Constants.API_KEY
+import com.udacity.asteroidradar.util.Constants.BASE_URL
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -22,7 +22,7 @@ object NasaApi {
         .client(okHttpClient)
         .addConverterFactory(ScalarsConverterFactory.create())
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
-        .baseUrl(Constants.BASE_URL)
+        .baseUrl(BASE_URL)
         .build()
 
         val retrofitService: NasaApiService by lazy { retrofit.create(NasaApiService::class.java) }
@@ -34,7 +34,7 @@ object NasaApi {
         val originalHttpUrl = originalRequest.url
 
         val newHttpUrl = originalHttpUrl.newBuilder()
-            .addQueryParameter("api_key", BuildConfig.API_KEY)
+            .addQueryParameter("api_key", API_KEY)
             .build()
 
         val newRequest = originalRequest.newBuilder()

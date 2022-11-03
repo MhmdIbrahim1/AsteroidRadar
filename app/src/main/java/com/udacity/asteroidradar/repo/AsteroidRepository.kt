@@ -10,6 +10,7 @@ import com.udacity.asteroidradar.data.PictureOfDay
 import com.udacity.asteroidradar.data.database.AsteroidDatabase
 import com.udacity.asteroidradar.data.network.NasaApi
 import com.udacity.asteroidradar.util.Constants
+import com.udacity.asteroidradar.util.Constants.API_KEY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -47,7 +48,7 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
         withContext(Dispatchers.IO) {
             try {
                 val response = NasaApi.retrofitService.getPictureOfDay(
-                    BuildConfig.API_KEY
+                   API_KEY
                 )
                 val pic = Moshi.Builder()
                     .build()

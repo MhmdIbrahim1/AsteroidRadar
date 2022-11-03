@@ -15,7 +15,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "API_KEY", "\"" + getApiKey() + "\""
+//        buildConfigField "String", "API_KEY", "\"" + getApiKey() + "\""
 
     }
 
@@ -44,16 +44,18 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }
-def getApiKey() {
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
-    String apiKey = properties.getProperty("api_key")
-    if (apiKey == null)
-        throw new GradleException("")
-
-    return apiKey
-}
+// another way to get the api key create this method then and adding the key in local.properties
+//def getApiKey() {
+//    Properties properties = new Properties()
+//    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+//
+//    String apiKey = properties.getProperty("api_key")
+//    if (apiKey == null)
+//        throw new GradleException("")
+//
+//    return apiKey
+//}
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
