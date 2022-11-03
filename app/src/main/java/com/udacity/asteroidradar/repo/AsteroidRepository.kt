@@ -4,12 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.squareup.moshi.Moshi
 import com.udacity.asteroidradar.BuildConfig
-import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
+import com.udacity.asteroidradar.util.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.data.Asteroid
 import com.udacity.asteroidradar.data.PictureOfDay
-import com.udacity.asteroidradar.database.AsteroidDatabase
-import com.udacity.asteroidradar.network.NasaApi
-import com.udacity.asteroidradar.onstants.Constants
+import com.udacity.asteroidradar.data.database.AsteroidDatabase
+import com.udacity.asteroidradar.data.network.NasaApi
+import com.udacity.asteroidradar.util.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject

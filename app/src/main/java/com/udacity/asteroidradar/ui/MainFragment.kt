@@ -11,29 +11,37 @@ import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
+    private var _binding: FragmentMainBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var mainViewModel: MainViewModel
 
-    private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
+//    private val viewModel: MainViewModel by lazy {
+//        ViewModelProvider(this).get(MainViewModel::class.java)
+//    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        val binding = FragmentMainBinding.inflate(inflater)
+        _binding = FragmentMainBinding.inflate(inflater,container,false)
         binding.lifecycleOwner = this
 
-        binding.viewModel = viewModel
+        binding.viewModel = mainViewModel
         binding.asteroidRecycler.adapter = AsteroidAdapter(AsteroidAdapter.OnClickListener {
-            viewModel.displayPropertyDetails(it)
+            mainViewModel.displayPropertyDetails(it)
 
         })
 
-        viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner) {
+        mainViewModel.navigateToSelectedProperty.observe(viewLifecycleOwner) {
             if ( null != it ) {
                 // Must find the NavController from the Fragment
                 this.findNavController().navigate(MainFragmentDirections.actionShowDetail(it)
                 )
                 // Tell the ViewModel we've made the navigate call to prevent multiple navigation
-                viewModel.displayPropertyDetailsComplete()
+                mainViewModel.displayPropertyDetailsComplete()
             }
         }
         setHasOptionsMenu(true)
@@ -48,11 +56,16 @@ class MainFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.week_asteroid -> viewModel.onViewWeekAsteroidsClicked()
-            R.id.today_asteroid -> viewModel.onTodayAsteroidsClicked()
-            R.id.save_asteroid -> viewModel.onSavedAsteroidsClicked()
+            R.id.week_asteroid -> mainViewModel.onViewWeekAsteroidsClicked()
+            R.id.today_asteroid -> mainViewModel.onTodayAsteroidsClicked()
+            R.id.save_asteroid -> mainViewModel.onSavedAsteroidsClicked()
         }
         return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 

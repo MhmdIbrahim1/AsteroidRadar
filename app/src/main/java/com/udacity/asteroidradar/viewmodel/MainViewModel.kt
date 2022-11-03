@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.data.Asteroid
 import com.udacity.asteroidradar.repo.AsteroidRepository
-import com.udacity.asteroidradar.database.AsteroidDatabase
+import com.udacity.asteroidradar.data.database.AsteroidDatabase
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {

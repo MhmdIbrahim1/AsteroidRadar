@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.udacity.asteroidradar.data.Asteroid
 import com.udacity.asteroidradar.databinding.ItemAsteroidBinding
-//import retrofit2.Call
 
 
 class AsteroidAdapter(private val onClickListener: OnClickListener) :
@@ -21,16 +20,14 @@ class AsteroidAdapter(private val onClickListener: OnClickListener) :
 
             binding.executePendingBindings()
         }
-    }
 
-
-    companion object DiffCallback : DiffUtil.ItemCallback<Asteroid>() {
-        override fun areItemsTheSame(oldItem: Asteroid, newItem: Asteroid): Boolean {
-            return oldItem === newItem
-        }
-
-        override fun areContentsTheSame(oldItem: Asteroid, newItem: Asteroid): Boolean {
-            return oldItem.id == newItem.id
+        companion object{
+            /** this fun we're basically returning this class which created*/
+            fun from(parent: ViewGroup): AsteroidPropertyViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemAsteroidBinding.inflate(layoutInflater,parent,false)
+                return AsteroidPropertyViewHolder(binding)
+            }
         }
     }
 
@@ -38,12 +35,7 @@ class AsteroidAdapter(private val onClickListener: OnClickListener) :
         parent: ViewGroup,
         viewType: Int
     ): AsteroidPropertyViewHolder {
-        return AsteroidPropertyViewHolder(
-            ItemAsteroidBinding.inflate(
-                LayoutInflater.from(parent.context), parent,
-                false
-            )
-        )
+        return AsteroidPropertyViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: AsteroidPropertyViewHolder, position: Int) {
@@ -58,5 +50,15 @@ class AsteroidAdapter(private val onClickListener: OnClickListener) :
         fun onClick(asteroid: Asteroid) = clickListener(asteroid)
     }
 
+    companion object DiffCallback : DiffUtil.ItemCallback<Asteroid>() {
+
+        override fun areItemsTheSame(oldItem: Asteroid, newItem: Asteroid): Boolean {
+            return oldItem === newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Asteroid, newItem: Asteroid): Boolean {
+            return oldItem.id == newItem.id
+        }
+    }
 
 }
