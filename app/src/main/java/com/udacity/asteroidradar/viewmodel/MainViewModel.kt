@@ -1,10 +1,14 @@
 package com.udacity.asteroidradar.viewmodel
 
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.data.Asteroid
 import com.udacity.asteroidradar.repo.AsteroidRepository
 import com.udacity.asteroidradar.data.database.AsteroidDatabase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -16,8 +20,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val todayAsteroidList = repository.todayAsteroidList
 
     val pictureOfDay = repository.pictureOfDay
-
-
     private val _navigateToSelectedProperty = MutableLiveData<Asteroid?>()
     val asteroidList: MediatorLiveData<List<Asteroid>> = MediatorLiveData()
 
@@ -30,13 +32,27 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     private fun getAsteroidData() {
-        viewModelScope.launch() {
-            repository.refreshAsteroidList()
-            repository.getPictureOfTheDate()
-            asteroidList.addSource(weekAsteroidList) {
-                asteroidList.value = it
+        if (hasInternetConnection()) {
+            viewModelScope.launch() {
+                repository.refreshAsteroidList()
+                repository.getPictureOfTheDate()
+                asteroidList.addSource(weekAsteroidList) {
+                    asteroidList.value = it
+                }
             }
-
+        }
+    }
+    private fun hasInternetConnection():Boolean{
+        val connectivityManager = getApplication<Application>().getSystemService(
+            Context.CONNECTIVITY_SERVICE
+        )as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork)?: return false
+        return when{
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)-> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)-> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)-> true
+            else -> false
         }
     }
 
@@ -56,27 +72,34 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     fun onTodayAsteroidsClicked() {
-        removeSource()
-        asteroidList.addSource(todayAsteroidList) {
-            asteroidList.value = it
-        }
+      viewModelScope.launch(Dispatchers.IO) {
+          removeSource()
+          asteroidList.addSource(todayAsteroidList) {todayData ->
+              asteroidList.value = todayData
+          }
+      }
+
 
     }
 
     fun onViewWeekAsteroidsClicked() {
-        removeSource()
-        asteroidList.addSource(weekAsteroidList) {
-            asteroidList.value = it
-        }
+       viewModelScope.launch(Dispatchers.IO) {
+           removeSource()
+           asteroidList.addSource(weekAsteroidList) {weekData ->
+               asteroidList.value = weekData
+           }
+       }
 
     }
 
     fun onSavedAsteroidsClicked() {
-        removeSource()
-        asteroidList.addSource(weekAsteroidList) {
-            asteroidList.value = it
+        viewModelScope.launch(Dispatchers.IO) {
+            removeSource()
+            asteroidList.addSource(weekAsteroidList) {savedData ->
+                asteroidList.value = savedData
+            }
         }
-
     }
+
 
 }
