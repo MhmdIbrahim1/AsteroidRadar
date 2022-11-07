@@ -4,11 +4,11 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+
 import androidx.lifecycle.*
 import com.udacity.asteroidradar.data.Asteroid
 import com.udacity.asteroidradar.repo.AsteroidRepository
 import com.udacity.asteroidradar.data.database.AsteroidDatabase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -32,28 +32,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     private fun getAsteroidData() {
-        if (hasInternetConnection()) {
-            viewModelScope.launch() {
-                repository.refreshAsteroidList()
-                repository.getPictureOfTheDate()
-                asteroidList.addSource(weekAsteroidList) {
-                    asteroidList.value = it
-                }
-            }
-        }
-    }
-    private fun hasInternetConnection():Boolean{
-        val connectivityManager = getApplication<Application>().getSystemService(
-            Context.CONNECTIVITY_SERVICE
-        )as ConnectivityManager
-        val activeNetwork = connectivityManager.activeNetwork ?: return false
-        val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork)?: return false
-        return when{
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)-> true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)-> true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)-> true
-            else -> false
-        }
+
+      try {
+
+          if (hasInternetConnection()) {
+              viewModelScope.launch {
+                  repository.refreshAsteroidList()
+                  repository.getPictureOfTheDate()
+                  asteroidList.addSource(weekAsteroidList) {
+                      asteroidList.value = it
+                  }
+              }
+          }
+      }catch (_:Exception){
+
+      }
     }
 
     fun displayPropertyDetails(asteroid: Asteroid) {
@@ -72,34 +65,41 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     fun onTodayAsteroidsClicked() {
-      viewModelScope.launch(Dispatchers.IO) {
-          removeSource()
+        removeSource()
           asteroidList.addSource(todayAsteroidList) {todayData ->
               asteroidList.value = todayData
           }
-      }
-
 
     }
 
     fun onViewWeekAsteroidsClicked() {
-       viewModelScope.launch(Dispatchers.IO) {
            removeSource()
            asteroidList.addSource(weekAsteroidList) {weekData ->
                asteroidList.value = weekData
            }
-       }
 
     }
 
     fun onSavedAsteroidsClicked() {
-        viewModelScope.launch(Dispatchers.IO) {
+
             removeSource()
             asteroidList.addSource(weekAsteroidList) {savedData ->
                 asteroidList.value = savedData
             }
+
+    }
+    private fun hasInternetConnection():Boolean{
+        val connectivityManager = getApplication<Application>().getSystemService(
+            Context.CONNECTIVITY_SERVICE
+        )as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork)?: return false
+        return when{
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)-> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)-> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)-> true
+            else -> false
         }
     }
-
 
 }
