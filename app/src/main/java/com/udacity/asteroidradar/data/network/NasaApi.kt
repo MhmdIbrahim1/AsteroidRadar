@@ -31,7 +31,7 @@ object NasaApi {
 
     private fun apiKeyInterceptor(it: Interceptor.Chain): Response {
         val originalRequest = it.request()
-        val originalHttpUrl = originalRequest.url
+        val originalHttpUrl = originalRequest.url()
 
         val newHttpUrl = originalHttpUrl.newBuilder()
             .addQueryParameter("api_key", API_KEY)

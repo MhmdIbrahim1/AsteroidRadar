@@ -8,7 +8,7 @@ object Constants {
     const val DEFAULT_END_DATE_DAYS = 7
     const val BASE_URL = "https://api.nasa.gov"
 
-    const val API_KEY = "" // api_key here
+    const val API_KEY = "ew7kur6XJWLT6KpGXWs2p1zgtFxFpxz4n7mf3Uyj" // api_key here
 
     fun getCurrentDate(): String {
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())

@@ -7,6 +7,7 @@ import com.udacity.asteroidradar.repo.AsteroidRepository
 import com.udacity.asteroidradar.data.database.AsteroidDatabase
 import kotlinx.coroutines.launch
 
+
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val database = AsteroidDatabase.getInstance(application)
     private val repository = AsteroidRepository(database)
@@ -17,10 +18,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val pictureOfDay = repository.pictureOfDay
 
 
-    private val _navigateToSelectedProperty = MutableLiveData<Asteroid>()
+    private val _navigateToSelectedProperty = MutableLiveData<Asteroid?>()
     val asteroidList: MediatorLiveData<List<Asteroid>> = MediatorLiveData()
 
-    val navigateToSelectedProperty: LiveData<Asteroid>
+    val navigateToSelectedProperty: MutableLiveData<Asteroid?>
         get() = _navigateToSelectedProperty
 
     init {
@@ -29,7 +30,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     private fun getAsteroidData() {
-        viewModelScope.launch {
+        viewModelScope.launch() {
             repository.refreshAsteroidList()
             repository.getPictureOfTheDate()
             asteroidList.addSource(weekAsteroidList) {
@@ -46,6 +47,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun displayPropertyDetailsComplete() {
         _navigateToSelectedProperty.value = null
+    }
+
+    private fun removeSource() {
+        asteroidList.removeSource(todayAsteroidList)
+        asteroidList.removeSource(weekAsteroidList)
     }
 
 
@@ -71,11 +77,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             asteroidList.value = it
         }
 
-    }
-
-    private fun removeSource() {
-        asteroidList.removeSource(todayAsteroidList)
-        asteroidList.removeSource(weekAsteroidList)
     }
 
 }
